@@ -1,0 +1,12 @@
+
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title><style>body{font-family:sans-serif;padding:20px}a{display:block;margin:10px 0;text-decoration:none;padding:10px;
+background:#0d9488;color:#fff;border-radius:5px;text-align:center}</style></head><body><h2>Admin Panel</h2>
+<a href="input-barang.html">➕ Input Barang</a>
+<a href="transaksi.html">🛒 Transaksi</a>
+<a href="daftar-barang.html">📦 Daftar Barang</a>
+<a href="riwayat-transaksi.html">📑 Riwayat Transaksi</a>
+<a href="login.html" onclick="logout()">🚪 Logout</a>
+<script>if(localStorage.getItem("login")!=="true"){location.href="login.html";}
+function logout(){localStorage.removeItem("login");}</script></body></html>

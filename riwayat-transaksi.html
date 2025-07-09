@@ -1,0 +1,11 @@
+
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riwayat Transaksi</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse;margin-bottom:30px}
+td,th{border:1px solid #ccc;padding:8px;text-align:center}</style></head><body><h2>Riwayat Transaksi</h2><div id="log"></div>
+<script>
+let trx=JSON.parse(localStorage.getItem("transaksi")||"[]");let out="";
+trx.forEach(t=>{out+=`<h4>${t.id} - ${t.tanggal}</h4><table><thead><tr><th>Kode</th><th>Nama</th><th>Harga</th><th>Jumlah</th><th>Total</th></tr></thead><tbody>`;
+t.items.forEach(i=>{out+=`<tr><td>${i.kode}</td><td>${i.nama}</td><td>${i.harga}</td><td>${i.jumlah}</td><td>${i.harga*i.jumlah}</td></tr>`});
+out+=`</tbody></table><p><strong>Total: Rp ${t.total.toLocaleString()}</strong></p>`});document.getElementById("log").innerHTML=out;
+</script></body></html>

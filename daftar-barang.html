@@ -1,0 +1,11 @@
+
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Barang</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}
+td,th{border:1px solid #ccc;padding:8px;text-align:center}</style></head><body>
+<h2>Daftar Barang</h2><table><thead><tr><th>Kode</th><th>Nama</th><th>Kategori</th><th>Ukuran</th><th>Stok</th><th>Harga Beli</th></tr></thead><tbody id="list"></tbody></table>
+<script>
+let listEl=document.getElementById("list");for(let k in localStorage){
+if(k.startsWith("barang_")){let b=JSON.parse(localStorage[k]);listEl.innerHTML+=`<tr><td>${b.kode}</td><td>${b.nama}</td><td>${b.kategori}</td>
+<td>${b.ukuran}</td><td>${b.stok}</td><td>${b.hargaBeli}</td></tr>`}}
+</script></body></html>
