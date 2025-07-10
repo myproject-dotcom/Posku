@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Barang</title>
+<style>
+body{font-family:sans-serif;padding:20px}form{max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px #ccc}
+input{width:100%;padding:8px;margin-top:5px;margin-bottom:10px}button{padding:10px;background:#2563eb;color:#fff;border:none;border-radius:5px}
+input[readonly]{background:#eee}
+</style>
+</head>
+<body>
+<h2>Input Barang</h2>
+<form onsubmit="simpanBarang(event)">
+  <input type="text" id="nama" placeholder="Nama Barang" required oninput="buatKode()">
+  <input type="number" id="harga" placeholder="Harga Beli (Rp)" required oninput="buatKode()">
+  <input type="number" id="stok" placeholder="Stok Awal" required min="1">
+  <input type="text" id="kode" placeholder="Kode Barang" readonly>
+  <button>Simpan</button>
+</form>
+<script>
+function buatKode(){
+  let namaVal = nama.value.trim();
+  let hargaVal = parseInt(harga.value) || 0;
+  if (!namaVal || !hargaVal) return kode.value = "";
+  let prefix = namaVal.split(" ").map(w => w[0].toUpperCase()).join("");
+  let hargaKode = Math.floor(hargaVal / 1000);
+  let urutan = localStorage.getItem("barang_index") || "0000";
+  kode.value = prefix + hargaKode + urutan;
+}
+function simpanBarang(e){
+  e.preventDefault();
+  if (parseInt(stok.value) < 1) return alert("Stok tidak boleh kurang dari 1");
+  let kodeVal = kode.value;
+  if (!kodeVal) return alert("Kode belum dibuat");
+  let barang = {
+    kode: kodeVal,
+    nama: nama.value,
+    harga: parseInt(harga.value),
+    stok: parseInt(stok.value)
+  };
+  localStorage.setItem("barang_" + kodeVal, JSON.stringify(barang));
+  let index = parseInt(localStorage.getItem("barang_index") || "0") + 1;
+  localStorage.setItem("barang_index", index.toString().padStart(4, "0"));
+  alert("Barang berhasil disimpan!");
+  e.target.reset(); kode.value = "";
+}
+</script>
+</body>
+</html>
