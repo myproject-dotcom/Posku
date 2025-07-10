@@ -13,6 +13,8 @@ input[readonly]{background:#eee}
 <h2>Input Barang</h2>
 <form onsubmit="simpanBarang(event)">
   <input type="text" id="nama" placeholder="Nama Barang" required oninput="buatKode()">
+  <input type="text" id="kategori" placeholder="Kategori">
+  <input type="text" id="ukuran" placeholder="Ukuran">
   <input type="number" id="harga" placeholder="Harga Beli (Rp)" required oninput="buatKode()">
   <input type="number" id="stok" placeholder="Stok Awal" required min="1">
   <input type="text" id="kode" placeholder="Kode Barang" readonly>
