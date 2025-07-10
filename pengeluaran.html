@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catat Pengeluaran</title><style>
+body{font-family:sans-serif;padding:20px}form{max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px #ccc}
+input{width:100%;padding:8px;margin-top:5px;margin-bottom:10px}button{padding:10px;background:#ef4444;color:#fff;border:none;border-radius:5px}
+</style></head>
+<body><h2>Catat Pengeluaran</h2>
+<form onsubmit="simpan(event)">
+  <input type="date" id="tgl" required>
+  <input type="text" id="ket" placeholder="Keterangan" required>
+  <input type="number" id="jml" placeholder="Jumlah (Rp)" required>
+  <button>Simpan</button>
+</form>
+<script>
+function simpan(e){
+  e.preventDefault();
+  let data = JSON.parse(localStorage.getItem("pengeluaran") || "[]");
+  data.push({tanggal: tgl.value, keterangan: ket.value, jumlah: parseFloat(jml.value)});
+  localStorage.setItem("pengeluaran", JSON.stringify(data));
+  alert("Pengeluaran disimpan!"); e.target.reset();
+}
+</script>
+</body></html>

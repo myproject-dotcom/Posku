@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan</title><style>
+body{font-family:sans-serif;padding:20px}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+td,th{border:1px solid #ccc;padding:8px;text-align:center}
+select{padding:6px;margin-bottom:10px}
+</style></head><body>
+<h2>Laporan Pemasukan & Pengeluaran</h2>
+<select id="filter" onchange="tampilkan()">
+  <option value="hari">Hari Ini</option>
+  <option value="minggu">Minggu Ini</option>
+  <option value="bulan">Bulan Ini</option>
+  <option value="tahun">Tahun Ini</option>
+</select>
+<div id="laporan"></div>
+<script>
+function dalamRentang(tgl,tipe){
+ let d=new Date(tgl),now=new Date();
+ if(tipe==="hari") return d.toDateString()===now.toDateString();
+ if(tipe==="minggu"){
+   let start=new Date(now);start.setDate(now.getDate()-now.getDay());
+   let end=new Date(start);end.setDate(start.getDate()+6);
+   return d>=start && d<=end;
+ }
+ if(tipe==="bulan") return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
+ if(tipe==="tahun") return d.getFullYear()===now.getFullYear();
+ return false;
+}
+function tampilkan(){
+ let tipe=filter.value, trx=JSON.parse(localStorage.getItem("transaksi")||"[]"),
+ peng=JSON.parse(localStorage.getItem("pengeluaran")||"[]");
+ let masuk=0, keluar=0;
+ trx.forEach(t=>{if(dalamRentang(t.tanggal,tipe)) masuk+=t.total});
+ peng.forEach(p=>{if(dalamRentang(p.tanggal,tipe)) keluar+=p.jumlah});
+ laporan.innerHTML=`<table>
+<tr><th>Periode</th><th>Pemasukan</th><th>Pengeluaran</th><th>Selisih</th></tr>
+<tr><td>${tipe}</td><td>Rp ${masuk.toLocaleString()}</td><td>Rp ${keluar.toLocaleString()}</td><td>Rp ${(masuk-keluar).toLocaleString()}</td></tr>
+</table>`;
+}
+tampilkan();
+</script>
+</body></html>
