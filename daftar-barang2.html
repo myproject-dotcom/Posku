@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Barang</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<style>
+body{font-family:sans-serif;padding:20px}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+td,th{border:1px solid #ccc;padding:8px;text-align:center}
+button{padding:6px 10px;margin:2px}
+</style>
+</head>
+<body>
+<h2>Daftar Barang</h2>
+<button onclick="hapusTerpilih()">Hapus Terpilih</button>
+<table><thead>
+<tr><th><input type="checkbox" onchange="toggleSemua(this)"></th><th>Kode</th><th>Nama</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
+</thead><tbody id="list"></tbody></table>
+<div id="popup" style="display:none;position:fixed;top:10%;left:50%;transform:translateX(-50%);background:#fff;padding:20px;box-shadow:0 0 10px #000;border-radius:10px">
+  <h3>Cetak QR Code</h3>
+  <p id="qr-nama"></p>
+  <input type="number" id="jumlah" value="1" min="1" style="width:100%;padding:6px;margin:10px 0">
+  <div id="qr-area" style="display:flex;flex-wrap:wrap;gap:10px;margin:10px 0"></div>
+  <button onclick="window.print()">🖨️ Cetak</button>
+  <button onclick="popup.style.display='none'">Tutup</button>
+</div>
+<script>
+let data = [], tbody = document.getElementById("list");
+function load(){
+ data=[];tbody.innerHTML="";
+ for(let k in localStorage){
+  if(k.startsWith("barang_")){
+   let b=JSON.parse(localStorage[k]);
+   data.push(b);
+   tbody.innerHTML += `<tr>
+<td><input type="checkbox" class="cek" value="${b.kode}"></td>
+<td>${b.kode}</td><td>${b.nama}</td><td>${b.harga}</td><td>${b.stok}</td>
+<td>
+ <button onclick="edit('${b.kode}')">Edit</button>
+ <button onclick="hapus('${b.kode}')">Hapus</button>
+ <button onclick="cetak('${b.kode}','${b.nama}')">QR</button>
+</td></tr>`;
+ }}
+}
+function edit(kode){
+ let b=JSON.parse(localStorage.getItem("barang_"+kode));
+ let nama=prompt("Nama",b.nama),harga=prompt("Harga",b.harga),stok=prompt("Stok",b.stok);
+ if(nama&&harga&&stok){
+  b.nama=nama;b.harga=parseInt(harga);b.stok=parseInt(stok);
+  localStorage.setItem("barang_"+kode,JSON.stringify(b));load();
+ }
+}
+function hapus(kode){
+ if(confirm("Hapus barang ini?")){
+  localStorage.removeItem("barang_"+kode);
+  load();
+ }
+}
+function hapusTerpilih(){
+ let cek=document.querySelectorAll(".cek:checked");
+ if(cek.length==0) return alert("Pilih barang yang ingin dihapus");
+ if(!confirm("Hapus semua barang terpilih?")) return;
+ cek.forEach(c=>localStorage.removeItem("barang_"+c.value));
+ load();
+}
+function toggleSemua(src){
+ document.querySelectorAll(".cek").forEach(c=>c.checked=src.checked);
+}
+function cetak(kode,nama){
+ document.getElementById("popup").style.display="block";
+ document.getElementById("qr-nama").textContent = "Kode: " + kode + " (" + nama + ")";
+ document.getElementById("jumlah").value = 1;
+ document.getElementById("qr-area").innerHTML = "";
+ document.getElementById("jumlah").oninput = () => buatQR(kode);
+ buatQR(kode);
+}
+function buatQR(kode){
+ let jml = parseInt(document.getElementById("jumlah").value) || 1;
+ let area = document.getElementById("qr-area");
+ area.innerHTML = "";
+ for(let i=0;i<jml;i++){
+  let div=document.createElement("div");
+  QRCode.toCanvas(kode, { width: 100 }, (err, canvas) => {
+    if(!err) div.appendChild(canvas);
+  });
+  area.appendChild(div);
+ }
+}
+load();
+</script>
+</body>
+</html>

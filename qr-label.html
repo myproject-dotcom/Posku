@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cetak Label QR</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; text-align: center }
+    .controls { margin-bottom: 20px }
+    .labels { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center }
+    .label { border: 1px solid #ccc; padding: 10px; width: 120px; text-align: center }
+    canvas { width: 100px; height: 100px }
+  </style>
+</head>
+<body>
+  <h2>Cetak Label QR Code</h2>
+  <div class="controls">
+    <input type="text" id="kode" placeholder="Masukkan kode barang" style="padding:8px;width:200px">
+    <input type="number" id="jumlah" placeholder="Jumlah" min="1" value="1" style="padding:8px;width:80px">
+    <button onclick="generate()">Buat QR</button>
+    <button onclick="downloadAll()">Download Semua</button>
+  </div>
+  <div id="label-container" class="labels"></div>
+
+<script>
+function generate(){
+  const kode = document.getElementById('kode').value.trim();
+  const jumlah = parseInt(document.getElementById('jumlah').value);
+  const container = document.getElementById('label-container');
+  container.innerHTML = '';
+  if (!kode || jumlah < 1) return alert("Isi kode dan jumlah dengan benar!");
+
+  for (let i = 0; i < jumlah; i++) {
+    const div = document.createElement("div");
+    div.className = "label";
+    const canvas = document.createElement("canvas");
+    QRCode.toCanvas(canvas, kode, { width: 100, height: 100 }, err => {
+      if (!err) {
+        const p = document.createElement("p");
+        p.textContent = kode;
+        div.appendChild(canvas);
+        div.appendChild(p);
+        container.appendChild(div);
+      }
+    });
+  }
+}
+
+function downloadAll(){
+  const canvases = document.querySelectorAll("canvas");
+  canvases.forEach((canvas, i) => {
+    const link = document.createElement("a");
+    link.download = `qr_${i+1}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+}
+</script>
+</body>
+</html>
