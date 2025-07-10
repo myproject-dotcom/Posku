@@ -15,7 +15,7 @@ button{padding:6px 10px;margin:2px}
 <h2>Daftar Barang</h2>
 <button onclick="hapusTerpilih()">Hapus Terpilih</button>
 <table><thead>
-<tr><th><input type="checkbox" onchange="toggleSemua(this)"></th><th>Kode</th><th>Nama</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
+<tr><th><input type="checkbox" onchange="toggleSemua(this)"></th><th>Kode</th><th>Nama</th><th>Kategori</th><th>Ukuran</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr>
 </thead><tbody id="list"></tbody></table>
 <div id="popup" style="display:none;position:fixed;top:10%;left:50%;transform:translateX(-50%);background:#fff;padding:20px;box-shadow:0 0 10px #000;border-radius:10px">
   <h3>Cetak QR Code</h3>
@@ -35,7 +35,12 @@ function load(){
    data.push(b);
    tbody.innerHTML += `<tr>
 <td><input type="checkbox" class="cek" value="${b.kode}"></td>
-<td>${b.kode}</td><td>${b.nama}</td><td>${b.hargaBeli}</td><td>${b.stok}</td>
+<td>${b.kode}</td>
+<td>${b.nama}</td>
+<td>${b.kategori}</td>
+<td>${b.ukuran}</td>
+<td>${b.hargaBeli}</td>
+<td>${b.stok}</td>
 <td>
  <button onclick="edit('${b.kode}')">Edit</button>
  <button onclick="hapus('${b.kode}')">Hapus</button>
