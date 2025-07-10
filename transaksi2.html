@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transaksi</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<style>
+body{font-family:sans-serif;padding:20px}table{width:100%;margin-top:20px;border-collapse:collapse}
+td,th{border:1px solid #ccc;padding:8px;text-align:center}input,select{padding:8px;width:100%;margin-top:5px;margin-bottom:10px}
+button{padding:6px 10px;margin:2px}#reader{margin:20px auto;width:300px}
+input[readonly]{background:#eee}
+</style>
+</head>
+<body>
+<h2>Transaksi</h2>
+<div id="reader"></div>
+<input type="text" id="kode" placeholder="Kode Barang" oninput="isiNamaBarang()">
+<input type="text" id="nama" placeholder="Nama Barang" readonly>
+<input type="number" id="harga" placeholder="Harga Jual">
+<input type="number" id="jumlah" placeholder="Jumlah" oninput="cekStok()">
+<small id="stok-info"></small>
+<button onclick="tambah()">Tambah</button>
+<table><thead><tr><th>Kode</th><th>Nama</th><th>Harga</th><th>Jumlah</th><th>Total</th><th>Aksi</th></tr></thead><tbody id="list"></tbody></table>
+<button onclick="simpanTransaksi()">Simpan Transaksi</button>
+<script>
+let data=[],barang={};
+for(let k in localStorage){
+  if(k.startsWith("barang_")){
+    let b=JSON.parse(localStorage[k]);
+    barang[b.kode]=b;
+  }
+}
+function isiNamaBarang(){
+  let b = barang[kode.value];
+  if(b){
+    nama.value = b.nama;
+    document.getElementById("stok-info").textContent = "Stok tersedia: " + b.stok;
+  } else {
+    nama.value = "";
+    document.getElementById("stok-info").textContent = "";
+  }
+}
+function cekStok(){
+  let b = barang[kode.value];
+  let j = +jumlah.value;
+  if(b && j > b.stok){
+    alert("Jumlah melebihi stok!");
+    jumlah.value = b.stok;
+  }
+}
+function tambah(){
+ let k=kode.value,h=+harga.value,j=+jumlah.value;
+ if(!k||!h||!j||!barang[k]) return alert("Data tidak valid");
+ if(j > barang[k].stok) return alert("Stok tidak mencukupi");
+ data.push({kode:k,nama:barang[k].nama,harga:h,jumlah:j});
+ render();
+ kode.value=harga.value=jumlah.value=nama.value="";document.getElementById("stok-info").textContent="";
+}
+function render(){
+ list.innerHTML="";
+ data.forEach((d,i)=>{
+   list.innerHTML+=`<tr><td>${d.kode}</td><td>${d.nama}</td><td>${d.harga}</td><td>${d.jumlah}</td><td>${d.harga*d.jumlah}</td>
+   <td><button onclick="edit(${i})">Edit</button><button onclick="hapus(${i})">Hapus</button></td></tr>`;
+ });
+}
+function edit(i){
+ let d=data[i],h=prompt("Harga",d.harga),j=prompt("Jumlah",d.jumlah);
+ if(h&&j){data[i].harga=+h;data[i].jumlah=+j;render();}
+}
+function hapus(i){if(confirm("Hapus item?")){data.splice(i,1);render();}}
+function simpanTransaksi(){
+ let trx=JSON.parse(localStorage.getItem("transaksi")||"[]"),id="TRX"+Date.now();
+ trx.push({id:id,tanggal:new Date().toISOString(),items:data,total:data.reduce((a,b)=>a+(b.harga*b.jumlah),0)});
+ data.forEach(d=>{
+   barang[d.kode].stok -= d.jumlah;
+   localStorage.setItem("barang_"+d.kode,JSON.stringify(barang[d.kode]));
+ });
+ localStorage.setItem("transaksi",JSON.stringify(trx));data=[];render();alert("Transaksi disimpan!");
+}
+new Html5Qrcode("reader").start({ facingMode: "environment" }, { fps: 10, qrbox: 250 },
+  msg => { kode.value = msg; isiNamaBarang(); }, err => {});
+</script>
+</body>
+</html>
