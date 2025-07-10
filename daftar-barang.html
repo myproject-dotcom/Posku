@@ -45,9 +45,9 @@ function load(){
 }
 function edit(kode){
  let b=JSON.parse(localStorage.getItem("barang_"+kode));
- let nama=prompt("Nama",b.nama),harga=prompt("Harga",b.harga),stok=prompt("Stok",b.stok);
+ let nama=prompt("Nama",b.nama),harga=prompt("Harga",b.hargaBeli),stok=prompt("Stok",b.stok);
  if(nama&&harga&&stok){
-  b.nama=nama;b.harga=parseInt(harga);b.stok=parseInt(stok);
+  b.nama=nama;b.hargaBeli=parseFloat(hargaBeli);b.stok=parseInt(stok);
   localStorage.setItem("barang_"+kode,JSON.stringify(b));load();
  }
 }
