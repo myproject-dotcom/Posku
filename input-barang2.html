@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Barang</title>
+<style>
+body{font-family:sans-serif;padding:20px}form{max-width:400px;margin:auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 0 10px #ccc}
+input{width:100%;padding:8px;margin-top:5px;margin-bottom:10px}button{padding:10px;background:#0d9488;color:#fff;border:none;border-radius:5px}
+</style>
+</head>
+<body>
+<h2>Input Barang</h2>
+<form onsubmit="simpanBarang(event)">
+  <input type="text" id="kode" placeholder="Kode Barang" required>
+  <input type="text" id="nama" placeholder="Nama Barang" required>
+  <input type="text" id="kategori" placeholder="Kategori">
+  <input type="text" id="ukuran" placeholder="Ukuran">
+  <input type="number" id="stok" placeholder="Stok Awal" required>
+  <input type="number" id="hargaBeli" placeholder="Harga Beli" required>
+  <button type="submit">Simpan</button>
+</form>
+<script>
+function simpanBarang(e){
+  e.preventDefault();
+  let b={kode:kode.value,nama:nama.value,kategori:kategori.value,ukuran:ukuran.value,
+  stok:parseInt(stok.value),hargaBeli:parseFloat(hargaBeli.value)};
+  localStorage.setItem('barang_'+b.kode,JSON.stringify(b));alert('Barang disimpan!');e.target.reset();
+}
+</script>
+</body>
+</html>
