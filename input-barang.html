@@ -28,7 +28,7 @@ function buatKode(){
   let prefix = namaVal.split(" ").map(w => w[0].toUpperCase()).join("");
   let hargaKode = Math.floor(hargaBeliVal / 1000);
   let urutan = localStorage.getItem("barang_index") || "0000000";
-  kode.value = prefix + hargaKode + urutan;
+  kode.value =  urutan + prefix + hargaKode ;
 }
 function simpanBarang(e){
   e.preventDefault();
