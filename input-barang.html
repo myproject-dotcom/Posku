@@ -23,10 +23,10 @@ input[readonly]{background:#eee}
 <script>
 function buatKode(){
   let namaVal = nama.value.trim();
-  let hargaVal = parseInt(harga.value) || 0;
-  if (!namaVal || !hargaVal) return kode.value = "";
+  let hargaBeliVal = parseFloat(hargaBeli.value) || 0;
+  if (!namaVal || !hargaBeliVal) return kode.value = "";
   let prefix = namaVal.split(" ").map(w => w[0].toUpperCase()).join("");
-  let hargaKode = Math.floor(hargaVal / 1000);
+  let hargaKode = Math.floor(hargaBeliVal / 1000);
   let urutan = localStorage.getItem("barang_index") || "0000000";
   kode.value = prefix + hargaKode + urutan;
 }
