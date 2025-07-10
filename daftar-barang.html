@@ -35,7 +35,7 @@ function load(){
    data.push(b);
    tbody.innerHTML += `<tr>
 <td><input type="checkbox" class="cek" value="${b.kode}"></td>
-<td>${b.kode}</td><td>${b.nama}</td><td>${b.harga}</td><td>${b.stok}</td>
+<td>${b.kode}</td><td>${b.nama}</td><td>${b.hargaBeli}</td><td>${b.stok}</td>
 <td>
  <button onclick="edit('${b.kode}')">Edit</button>
  <button onclick="hapus('${b.kode}')">Hapus</button>
