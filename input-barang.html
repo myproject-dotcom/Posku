@@ -27,7 +27,7 @@ function buatKode(){
   if (!namaVal || !hargaVal) return kode.value = "";
   let prefix = namaVal.split(" ").map(w => w[0].toUpperCase()).join("");
   let hargaKode = Math.floor(hargaVal / 1000);
-  let urutan = localStorage.getItem("barang_index") || "0000";
+  let urutan = localStorage.getItem("barang_index") || "0000000";
   kode.value = prefix + hargaKode + urutan;
 }
 function simpanBarang(e){
@@ -38,6 +38,8 @@ function simpanBarang(e){
   let barang = {
     kode: kodeVal,
     nama: nama.value,
+    kategori: kategori.value,
+    ukuran: ukuran.value,
     harga: parseInt(harga.value),
     stok: parseInt(stok.value)
   };
